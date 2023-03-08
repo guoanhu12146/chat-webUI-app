@@ -72,6 +72,7 @@ function App() {
     }
   };
 
+  // Setup the sidemenu dynamics
   const [showSidemenu, setShowSidemenu] = useState(false);
   const [showFloatmenu, setFloatmenu] = useState(false);
 
@@ -98,20 +99,35 @@ function App() {
     setFloatmenu(false);
   };
 
+  const handleNewchatClick = () => {
+    setMessages(
+      [
+        { id: 1, from: 'user', text: 'Hi there!' },
+        { id: 2, from: 'agent', text: 'Hello, how can I help you?' },
+        { id: 3, from: 'user', text: 'I need help with my account' },
+        { id: 4, from: 'agent', text: '# This is a heading\n\nThis is a paragraph with **bold** and *italic* text.' },
+      ]
+    )
+    //#TODO Communicate with backend so that It may begin a new session
+  };
+
+  const newchatButton = (
+    <div className="newchat-button">
+            <span className="newchat-span"> <FontAwesomeIcon icon={faPlus} /> </span> New chat
+            <button className="newchat-click" onClick={handleNewchatClick}></button>
+    </div>
+  );
+
   const sidemenu = (
     <>
       {showSidemenu && (
         <aside className="sidemenu">
-          <div className="newchat-button">
-            <span className="newchat-span"> <FontAwesomeIcon icon={faPlus} /> </span> New chat
-          </div>
+          {newchatButton}
         </aside>
       )}
       {showFloatmenu && (
         <aside className="float-sidemenu">
-          <div className="newchat-button">
-            <span className="newchat-span"> <FontAwesomeIcon icon={faPlus} /> </span> New chat
-          </div>
+          {newchatButton}
         </aside>
       )}
       {!showSidemenu && !showFloatmenu && (
@@ -171,16 +187,24 @@ function handleKeyDown(event) {
 }
 
 function AutoSizeTextarea(onKeyDown, onChange) {
+  // Create a ref that will be used to get a reference to the textarea element
   const textareaRef = useRef(null);
+  // Initialize the number of rows to 1
   var rows = 1
 
+  // Use the useEffect hook to calculate the appropriate number of rows for the textarea element based on its content
   useEffect(() => {
     if (textareaRef.current) {
+      // Set the textarea element's height to "auto" to measure its actual height
       textareaRef.current.style.height = "auto";
       let scrollHeight = textareaRef.current.scrollHeight;
+      // Calculate the number of rows based on the textarea element's scrollHeight 
+      // and the height of a single row (24 pixels in this case)
       rows = Math.floor(scrollHeight/24) > 5 ? 6 : Math.floor(scrollHeight/24);
+      // Set the textarea element's height to the appropriate height based on the number of rows
       textareaRef.current.style.height = `${scrollHeight > 48 ? rows * 24 : 24}px`;
-      // 
+      // Set the textarea element's overflowY property to "auto" if the number of rows is greater than 5, 
+      // which will enable scrolling if the content exceeds the height of the textarea element
       if (rows > 5) {
         textareaRef.current.style.overflowY = "auto"
       } else {
@@ -189,9 +213,24 @@ function AutoSizeTextarea(onKeyDown, onChange) {
     }
   });
 
+  // send a simulated key press event for the Enter key to the textarea element
+  // so it can be used for sending user input to API
+  function handleInputClick() {
+    const textarea = textareaRef.current;
+    const enterKeyEvent = new KeyboardEvent('keydown', {
+      key: 'Enter',
+      code: 'Enter',
+      keyCode: 13,
+      which: 13,
+      bubbles: true,
+      cancelable: true
+    });
+    textarea.dispatchEvent(enterKeyEvent);
+  }
 
   return (
-    <textarea className = "chat-input-textarea"
+    <>
+    <textarea className="chat-input-textarea"
       ref={textareaRef}
       rows={rows}
       onChange={onChange}
@@ -200,7 +239,10 @@ function AutoSizeTextarea(onKeyDown, onChange) {
         overflowY: rows > 5 ? "scroll" : "hidden",
       }}
     />
+    <button className="input-button" onClick={handleInputClick}> &larr; </button>
+    </>
   );
 }
+
 
 export default App;

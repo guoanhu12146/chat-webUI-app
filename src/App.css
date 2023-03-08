@@ -72,6 +72,18 @@ body {
   z-index: 9999;
 }
 
+.input-button {
+  position: relative;
+  top: -18px;
+  right: 35px;
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 9999;
+}
+
 .chatbox {
   flex : 1;
   /*border:1px solid #6e6e80;*/
@@ -91,7 +103,20 @@ body {
   border-radius: 6px;
   text-align: left;
   font-size: 14px;
-  
+}
+
+.newchat-click {
+  position: fixed;
+  padding: 12px;
+  width: 240px;
+  height: 44px;
+  left: 11px;
+  top: 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  z-index: 9999;
+  cursor: pointer;
 }
 
 .newchat-button:hover {
