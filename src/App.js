@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect  } from 'react';
 import MarkdownIt from 'markdown-it';
 
 
@@ -25,40 +25,78 @@ function App() {
   };
   // this is for the text input area
   const handleInputKeyDown = (event) => {
-    if (event.target.value != '') {
-      if (event.key === 'Enter') {
-        event.target.style.height = '24px';
+    let text = event.target.value;
+    console.log(text)
+    if ( text !== "") {
+      if (event.key === "Enter") {
+        event.target.style.height = "24px";
         setMessages([
           ...messages,
-          { id: messages.length + 1, from: 'user', text: inputValue },
+          { id: messages.length + 1, from: "user", text: text },
         ]);
-        setInputValue('');
+        event.target.value = ''
       }
     }
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       event.preventDefault();
     }
   };
-  // size adjustment for the text input area
-  const handleTextareaInput = (event) => {
-    if (event.target.scrollHeight === 48) {
-    event.target.style.height = '24px';
-    } else {
-      event.target.style.height = event.target.scrollHeight + 'px';
-    }
-    if (event.target.value === '') {
-      event.target.style.height = '24px';
-    }
+
+  const [showSidemenu, setShowSidemenu] = useState(false);
+  const [showFloatmenu, setFloatmenu] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setShowSidemenu(true);
+      } else {
+        setShowSidemenu(false);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const handleButtonClick = () => {
+    setFloatmenu(true);
   };
+
+  const handleCloseClick = () => {
+    setFloatmenu(false);
+  };
+
+  const sidemenu = (
+    <>
+      {showSidemenu && (
+        <aside className="sidemenu">
+          <div className="newchat-button">
+            <span className="newchat-span"> <FontAwesomeIcon icon={faPlus} /> </span> New chat
+          </div>
+        </aside>
+      )}
+      {showFloatmenu && (
+        <aside className="float-sidemenu">
+          <div className="newchat-button">
+            <span className="newchat-span"> <FontAwesomeIcon icon={faPlus} /> </span> New chat
+          </div>
+        </aside>
+      )}
+      {!showSidemenu && !showFloatmenu && (
+        <button className="button" onClick={handleButtonClick}> = </button>
+      )}
+      {!showSidemenu && showFloatmenu && (
+        <button className="button" onClick={handleCloseClick}> x </button>
+      )}
+    </>
+  );
 
   return (
     <div className="App">
-      <aside className="sidemenu">
-        <div className = "newchat-button">
-          <span className="newchat-span"> <FontAwesomeIcon icon={faPlus} /> </span> New chat
-        </div>
-      </aside>
-      <section className = "chatbox">
+      {sidemenu}
+      <section className="chatbox">
         <div className="chat-log">
           {messages.map((message) => (
             <div
@@ -68,13 +106,13 @@ function App() {
               }`}
             >
               <div className="message-border">
-                <div className="message-container">   
+                <div className="message-container">
                   <div className="message-avatar"> {message.from[0]} </div>
                   <div className="message-text">
                     <div
-                        dangerouslySetInnerHTML={{ __html: md.render(message.text) }}
-                      />
-                  </div>  
+                      dangerouslySetInnerHTML={{ __html: md.render(message.text) }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -83,19 +121,51 @@ function App() {
         </div>
         <div className="chat-input-container">
           <div className="chat-input-box">
-            <textarea
-              className="chat-input-textarea"
-              placeholder=""
-              rows="1"
-              value={inputValue}
-              onInput={handleTextareaInput}
-              onKeyDown={handleInputKeyDown}
-              onChange={handleInputChange}
-            ></textarea>
+            {AutoSizeTextarea(handleInputKeyDown, handleInputChange)}
           </div>
         </div>
       </section>
     </div>
+  );
+}
+
+function handleKeyDown(event) {
+  if (event.keyCode === 13) { // check if Enter key was pressed
+    event.preventDefault(); // prevent default behavior (adding a new line)
+    event.target.value = ''; // clear textarea's content
+  }
+}
+
+function AutoSizeTextarea(onKeyDown, onChange) {
+  const textareaRef = useRef(null);
+  var rows = 1
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      let scrollHeight = textareaRef.current.scrollHeight;
+      rows = Math.floor(scrollHeight/24) > 5 ? 6 : Math.floor(scrollHeight/24);
+      textareaRef.current.style.height = `${scrollHeight > 48 ? rows * 24 : 24}px`;
+      // 
+      if (rows > 5) {
+        textareaRef.current.style.overflowY = "auto"
+      } else {
+        textareaRef.current.style.overflowY = "hidden"
+      }
+    }
+  });
+
+
+  return (
+    <textarea className = "chat-input-textarea"
+      ref={textareaRef}
+      rows={rows}
+      onChange={onChange}
+      onKeyDown = {onKeyDown}
+      style={{
+        overflowY: rows > 5 ? "scroll" : "hidden",
+      }}
+    />
   );
 }
 

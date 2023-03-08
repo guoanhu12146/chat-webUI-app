@@ -1,9 +1,16 @@
+body {
+  min-width: 600px;
+  overflow: clip;
+}
+
 .App {
   text-align: center;
   display: flex;
   background-color: #282c34;
   color: white;
   position: absolute;
+  overflow-x: clip;
+  min-width: 600px;
   top:0;bottom: 0; left:0; right:0;
 }
 
@@ -34,14 +41,41 @@
 /* added */
 .sidemenu {
   width:240px;
+  min-width: 240px;
   padding:10px;
  /* border:1px solid #6e6e80;*/
   background-color: #202123;
 }
 
+.float-sidemenu {
+  height: 100%;
+  width:240px;
+  min-width: 240px;
+  padding:10px;
+ /* border:1px solid #6e6e80;*/
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: #202123f3;
+  z-index: 9999;
+}
+
+.button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 9999;
+}
+
 .chatbox {
   flex : 1;
   /*border:1px solid #6e6e80;*/
+  min-width: 600px;
   background-color: #40414f;
   overflow-x: clip;
   display: flex;
