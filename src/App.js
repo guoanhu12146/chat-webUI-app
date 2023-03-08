@@ -4,7 +4,7 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import React, { useState, useRef, useEffect  } from 'react';
-import MarkdownIt from 'markdown-it';
+import RenderChat from './chat-box/RenderChat';
 
 //    { id: 4, from: 'agent', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.?' },
 
@@ -14,57 +14,61 @@ function App() {
     { id: 1, from: 'user', text: 'Hi there!' },
     { id: 2, from: 'agent', text: 'Hello, how can I help you?' },
     { id: 3, from: 'user', text: 'I need help with my account' },
-    { id: 4, from: 'agent', text: '# This is a heading\n\nThis is a paragraph with **bold** and *italic* text.' },
+    { id: 4, from: 'agent', text: '# This is a heading\nThis is a paragraph with **bold** and *italic* text.' },
   ]);
-
-  const md = new MarkdownIt(); // create a new instance of the MarkdownIt parser
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
+  
   // this is for the text input area
-  const handleInputKeyDown = (event) => {
+  const handleInputKeyDown = async (event) => {
     let text = event.target.value;
-    if ( text !== "") {
+    if (text !== '') {
       if (event.keyCode === 13) {
-        event.target.style.height = "24px";
+        event.preventDefault();
+        event.target.style.height = '24px';
         setMessages([
           ...messages,
-          { id: messages.length + 1, from: "user", text: text },
+          { id: messages.length + 1, from: 'user', text: text },
         ]);
-        event.target.value = ''
-
-        fetch('http://localhost:8000/api/send-message', {
-          method: 'POST',
-          body: JSON.stringify({ message: text }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then((sendMessageResponse) => {
-          console.log(sendMessageResponse);
-          return fetch('http://localhost:8000/api/get-completion', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
+        event.target.value = '';
+  
+        try {
+          const sendMessageResponse = await fetch(
+            'http://localhost:8000/api/send-message',
+            {
+              method: 'POST',
+              body: JSON.stringify({ message: text }),
+              headers: {
+                'Content-Type': 'application/json',
+              },
             }
-          });
-        })
-        .then((completionResponse) => {
-          console.log(completionResponse);
-          return completionResponse.json();
-        })
-        .then((data) => {
-          console.log(data);
+          );
+          console.log(sendMessageResponse);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+        var data = '';
+        var eventSource = new EventSource('http://localhost:8000/api/get-completion-streaming');
+        eventSource.onmessage = (event) => {
+          let newData = event.data;
+          // God knows why I need to parse it specifically
+          if (newData === "\\n") {
+            console.log(newData);
+            newData = '';
+            data += '  \n  ';
+          }
+          if (newData === '\0')
+            eventSource.close();
+          else
+            data += newData;
           setMessages([
             ...messages,
             { id: messages.length + 1, from: 'user', text: text },
-            { id: messages.length + 2, from: 'agent', text:data },
+            { id: messages.length + 2, from: 'agent', text: data },
           ]);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+        }; 
       }
     }
     if (event.keyCode === 13) {
@@ -105,7 +109,7 @@ function App() {
         { id: 1, from: 'user', text: 'Hi there!' },
         { id: 2, from: 'agent', text: 'Hello, how can I help you?' },
         { id: 3, from: 'user', text: 'I need help with my account' },
-        { id: 4, from: 'agent', text: '# This is a heading\n\nThis is a paragraph with **bold** and *italic* text.' },
+        { id: 4, from: 'agent', text: '### This is a heading\n\nThis is a paragraph with **bold** and *italic* text.' },
       ]
     )
     //#TODO Communicate with backend so that It may begin a new session
@@ -147,25 +151,7 @@ function App() {
       {sidemenu}
       <section className="chatbox">
       <div className="chat-log" ref={chatlogRef}>
-      {messages.map((message) => (
-        <div
-          key={message.id}
-          className={`chat-message ${
-            message.from === 'user' ? 'from-user' : 'from-agent'
-          }`}
-        >
-          <div className="message-border">
-            <div className="message-container">   
-              <div className="message-avatar"> {message.from[0]} </div>
-              <div className="message-text">
-                <div
-                    dangerouslySetInnerHTML={{ __html: md.render(message.text) }}
-                  />
-              </div>  
-            </div>
-          </div>
-        </div>
-      ))}
+        <RenderChat messages={messages} />
       <div> {completion} </div>
       <div className="message-border"> </div>
       </div>
@@ -177,13 +163,6 @@ function App() {
       </section>
     </div>
   );
-}
-
-function handleKeyDown(event) {
-  if (event.keyCode === 13) { // check if Enter key was pressed
-    event.preventDefault(); // prevent default behavior (adding a new line)
-    event.target.value = ''; // clear textarea's content
-  }
 }
 
 function AutoSizeTextarea(onKeyDown, onChange) {
