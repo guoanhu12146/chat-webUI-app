@@ -1,10 +1,12 @@
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import React, { useState, useRef, useEffect  } from 'react';
 import RenderChat from './chat-box/RenderChat';
+
+import {PaperAirplaneIcon} from '@heroicons/react/24/solid'
+
 
 //    { id: 4, from: 'agent', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.?' },
 
@@ -59,6 +61,7 @@ function App() {
             newData = '';
             data += '  \n  ';
           }
+          // 
           if (newData === '\0')
             eventSource.close();
           else
@@ -208,7 +211,7 @@ function AutoSizeTextarea(onKeyDown, onChange) {
   }
 
   return (
-    <>
+    <div className='chat-input-area'>
     <textarea className="chat-input-textarea"
       ref={textareaRef}
       rows={rows}
@@ -218,8 +221,10 @@ function AutoSizeTextarea(onKeyDown, onChange) {
         overflowY: rows > 5 ? "scroll" : "hidden",
       }}
     />
-    <button className="input-button" onClick={handleInputClick}> &larr; </button>
-    </>
+    <button className="input-button" onClick={handleInputClick}> 
+      <PaperAirplaneIcon className="input-icon" style={{height:'18px', width:'18px',color:'#8e8ea0', transform: 'rotate(-45deg)'}}></PaperAirplaneIcon>
+     </button>
+    </div>
   );
 }
 
