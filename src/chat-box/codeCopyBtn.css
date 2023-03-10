@@ -1,0 +1,52 @@
+.code-pre {
+    padding: 1px;
+    padding-top: 10px;
+    padding-bottom: 0px;
+    background-color: #343541;
+    margin-bottom: 1.5em !important;
+    position: relative;
+    border-radius: 8px;
+}
+
+.code-name {
+    padding-left: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: small;
+    background-color: #343541;
+}
+
+.code-content {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.code-bk-inline {
+    color: rgb(224, 69, 69)
+}
+
+.code-copy-btn {
+    color: white;
+    position: absolute;
+    right: 10px;
+    top: 4px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.code-copy-btn:hover {
+    transform: scale(1.1);
+    opacity: 0.9;
+}
+
+.code-real-btn {
+    border: none;
+    background-color: transparent;
+    color: transparent;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 30px;
+    width: 24px;
+    cursor: pointer;
+}

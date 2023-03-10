@@ -74,15 +74,26 @@ body {
 
 .input-button {
   position: relative;
-  top: -18px;
-  right: 35px;
+  bottom: -4.5px;
+  left: -34px;
   background-color: transparent;
   color: #fff;
   border: none;
-  font-size: 20px;
+  font-size: 14px;
+  padding:1px;
+  width: 32px;
   cursor: pointer;
   z-index: 9999;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
+
+.input-button:hover {
+  background-color: #28292c;
+}
+
 
 .chatbox {
   flex : 1;
@@ -98,7 +109,7 @@ body {
 }
 
 .newchat-button {
-  padding: 12px;
+  padding: 12.5px;
   border: 0.5px solid #4d4d4f;
   border-radius: 6px;
   text-align: left;
@@ -109,7 +120,7 @@ body {
   position: fixed;
   padding: 12px;
   width: 240px;
-  height: 44px;
+  height: 45px;
   left: 11px;
   top: 8px;
   border: none;
@@ -140,6 +151,7 @@ body {
   left: 0;
   right: 0;
   border: none;
+  display: inline-block
 }
 
 .chat-input-box {
@@ -158,11 +170,12 @@ body {
   font-size: 1.25em;
   outline: none;
   padding: 12px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   resize: none;
+  vertical-align: middle;
   margin: 0;
 }
 
@@ -263,10 +276,11 @@ body {
 .message-avatar {
   width: 32px;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 12px;
   text-align: start;
   align-self: start;
-  margin-left: 0.3rem;
+  padding: 0.70rem;
+  margin-left: 0.0rem;
 }
 
 .message-text {
