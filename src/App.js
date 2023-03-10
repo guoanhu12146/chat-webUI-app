@@ -13,11 +13,20 @@ import {PaperAirplaneIcon} from '@heroicons/react/24/solid'
 function App() {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState([
-    { id: 1, from: 'user', text: 'Hi there!' },
-    { id: 2, from: 'agent', text: 'Hello, how can I help you?' },
-    { id: 3, from: 'user', text: 'I need help with my account' },
-    { id: 4, from: 'agent', text: '# This is a heading\nThis is a paragraph with **bold** and *italic* text.' },
+    { id: Number, from: String, text: String },
   ]);
+
+  function updateMessage(id, from, text) {
+    setMessages(prevMessages =>
+      prevMessages.map(message => {
+        if (message.id === id) {
+          return { ...message, from, text };
+        } else {
+          return message;
+        }
+      })
+    );
+  }
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -56,7 +65,7 @@ function App() {
         eventSource.onmessage = (event) => {
           let newData = event.data;
           // God knows why I need to parse it specifically
-          if (newData === "XG4=") {
+          if (newData === "/XG4=/") {
             newData = '';
             data += '  \n  ';
           }
@@ -108,15 +117,26 @@ function App() {
   const handleNewchatClick = () => {
     setMessages(
       [
+        //{ id: Number, from: String, text: String },
         { id: 1, from: 'user', text: 'Hi there!' },
-        { id: 2, from: 'agent', text: 'Hello, how can I help you?' },
-        { id: 3, from: 'user', text: 'I need help with my account' },
-        { id: 4, from: 'agent', text: '### This is a heading\n\nThis is a paragraph with **bold** and *italic* text.' },
+          { id: 2, from: 'agent', text: 'Hello, how can I help you?' },
+          { id: 3, from: 'user', text: 'I need help with my account' },
+          { id: 4, from: 'agent', text: '### This is a heading\n\nThis is a paragraph with **bold** and *italic* text.' },
       ]
     )
     //#TODO Communicate with backend so that It may begin a new session
+    const sendMessageResponse = fetch(
+      'http://localhost:8000/api/new-chat',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    console.log(sendMessageResponse);
   };
-
+  /**         */
   const newchatButton = (
     <div className="newchat-button">
             <span className="newchat-span"> <FontAwesomeIcon icon={faPlus} /> </span> New chat
@@ -153,7 +173,7 @@ function App() {
       {sidemenu}
       <section className="chatbox">
       <div className="chat-log" ref={chatlogRef}>
-        <RenderChat messages={messages} />
+        {messages.length > 1 ? (<RenderChat messages={messages} updateMessage={updateMessage}/>) : <></>}
       <div> {completion} </div>
       <div className="message-border"> </div>
       </div>
