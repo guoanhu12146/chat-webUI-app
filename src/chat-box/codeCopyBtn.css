@@ -20,8 +20,9 @@
     border-bottom-right-radius: 8px;
 }
 
-.code-bk-inline {
-    color: rgb(224, 69, 69)
+.code-content-inline {
+    background: transparent;
+    background-color: transparent;
 }
 
 .code-copy-btn {

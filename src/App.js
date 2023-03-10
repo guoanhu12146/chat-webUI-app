@@ -56,8 +56,7 @@ function App() {
         eventSource.onmessage = (event) => {
           let newData = event.data;
           // God knows why I need to parse it specifically
-          if (newData === "\\n") {
-            console.log(newData);
+          if (newData === "XG4=") {
             newData = '';
             data += '  \n  ';
           }

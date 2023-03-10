@@ -19,7 +19,7 @@ function RenderChat(props) {
         {children}
     </div>
 
-  function renderMessageText(message) {
+  function renderBotMessageText(message) {
 
     return (
       <ReactMarkdown children={message} parserOptions={{ commonmark: true }} remarkPlugins={[gfm]}  
@@ -41,13 +41,27 @@ function RenderChat(props) {
                   </Highlighter>
                 </>
               ) : (
-                  <code className={className += "inline"} {...props}>
-                      {children}
-                  </code>
+                  <Highlighter
+                      className="code-content-inline"
+                      style={vscDarkPlus}
+                      customStyle={{background: 'transparent', fontsize:"15px"}}
+                      useInlineStyles={true}
+                      PreTag="code"
+                      {...props}
+                  >
+                      {String(children).replace(/\n$/, '')}
+                  </Highlighter>
               )
           }
         }}
       />
+    );
+  }
+
+  function renderUserMessageText(message) {
+
+    return (
+      <ReactMarkdown children={message} parserOptions={{ commonmark: true }} remarkPlugins={[gfm]}  />
     );
   }
 
@@ -68,7 +82,9 @@ function RenderChat(props) {
               <div className="message-avatar"> {
               message.from === 'user' ? <UserIcon style={{color:'#009fce'}} /> : <CubeTransparentIcon style={{color:'#10a37f'}} />} </div>
               <div className="message-text">
-                {renderMessageText(message.text)}
+                {message.from === 'user'
+                  ? renderUserMessageText(message.text)
+                  : renderBotMessageText(message.text)}
               </div>
             </div>
           </div>
