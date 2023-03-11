@@ -1,0 +1,71 @@
+.sidemenu {
+    width:240px;
+    min-width: 240px;
+    padding:10px;
+   /* border:1px solid #6e6e80;*/
+    background-color: #202123;
+  }
+  
+  .float-sidemenu {
+    height: 100%;
+    width:240px;
+    min-width: 240px;
+    padding:10px;
+   /* border:1px solid #6e6e80;*/
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color: #202123f3;
+    z-index: 9999;
+  }
+  
+  .button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 9999;
+  }
+
+
+  .newchat-button {
+    padding: 12.5px;
+    border: 0.5px solid #4d4d4f;
+    border-radius: 6px;
+    text-align: left;
+    font-size: 14px;
+  }
+  
+  .newchat-click {
+    position: fixed;
+    padding: 12px;
+    width: 240px;
+    height: 45px;
+    left: 11px;
+    top: 8px;
+    border: none;
+    border-radius: 6px;
+    background-color: transparent;
+    z-index: 9999;
+    cursor: pointer;
+  }
+  
+  .newchat-button:hover {
+    padding: 12px;
+    border: 0.5px solid #535357;
+    background-color: #28292c;
+    border-radius: 6px;
+    text-align: left;
+    font-size: 14px;
+  }
+  
+  .newchat-span {
+    text-align: left;
+    font-size: 12px;
+    margin-right: 10px;
+  }
+  

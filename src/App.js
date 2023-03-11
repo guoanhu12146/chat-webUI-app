@@ -1,11 +1,12 @@
 import './App.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import React, { useState, useRef, useEffect  } from 'react';
 import RenderChat from './chat-box/RenderChat';
+import AutoSizeTextarea from './input-area/InputArea';
+import SideMenu from './side-menu/SideMenu';
+import ScrollToBottom from 'react-scroll-to-bottom';
+import { css } from 'glamor';
 
-import {PaperAirplaneIcon} from '@heroicons/react/24/solid'
 
 
 //    { id: 4, from: 'agent', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.?' },
@@ -13,7 +14,6 @@ import {PaperAirplaneIcon} from '@heroicons/react/24/solid'
 function App() {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState([
-    { id: Number, from: String, text: String },
   ]);
 
   function updateMessage(id, from, text) {
@@ -87,165 +87,51 @@ function App() {
     }
   };
 
-  // Setup the sidemenu dynamics
-  const [showSidemenu, setShowSidemenu] = useState(false);
-  const [showFloatmenu, setFloatmenu] = useState(false);
+  //const chatlogRef = useRef(null);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 768) {
-        setShowSidemenu(true);
-      } else {
-        setShowSidemenu(false);
-      }
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  const titlePage = (
+    <h1 className='position-center text-4xl font-semibold text-center text-gray-600 ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center flex-grow'>
+        ChatGPT
+        <span className='bg-yellow-200 text-yellow-900 py-05 px-15 text-xs md:text-sm rounded-md uppercase'>Context</span>
+    </h1>
+  )
 
-  const handleButtonClick = () => {
-    setFloatmenu(true);
-  };
+  const chatLogStyles = css({
+    position: 'relative',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    border: 'none',
+    margin: 0,
+    justifyItems: 'center',
+    overflowX: 'hidden',
+    overflowY: 'auto',
+    width: '100%',
+  });
 
-  const handleCloseClick = () => {
-    setFloatmenu(false);
-  };
+  const childrenStyle = css({
+    border: 'none',
+    overflowX: 'hidden',
+    overflowY: 'auto',
+  });
 
-  const handleNewchatClick = () => {
-    setMessages(
-      [
-        //{ id: Number, from: String, text: String },
-        { id: 1, from: 'user', text: 'Hi there!' },
-          { id: 2, from: 'agent', text: 'Hello, how can I help you?' },
-          { id: 3, from: 'user', text: 'I need help with my account' },
-          { id: 4, from: 'agent', text: '### This is a heading\n\nThis is a paragraph with **bold** and *italic* text.' },
-      ]
-    )
-    //#TODO Communicate with backend so that It may begin a new session
-    const sendMessageResponse = fetch(
-      'http://localhost:8000/api/new-chat',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    console.log(sendMessageResponse);
-  };
-  /**         */
-  const newchatButton = (
-    <div className="newchat-button">
-            <span className="newchat-span"> <FontAwesomeIcon icon={faPlus} /> </span> New chat
-            <button className="newchat-click" onClick={handleNewchatClick}></button>
-    </div>
-  );
-
-  const sidemenu = (
-    <>
-      {showSidemenu && (
-        <aside className="sidemenu">
-          {newchatButton}
-        </aside>
-      )}
-      {showFloatmenu && (
-        <aside className="float-sidemenu">
-          {newchatButton}
-        </aside>
-      )}
-      {!showSidemenu && !showFloatmenu && (
-        <button className="button" onClick={handleButtonClick}> = </button>
-      )}
-      {!showSidemenu && showFloatmenu && (
-        <button className="button" onClick={handleCloseClick}> x </button>
-      )}
-    </>
-  );
-
-  const chatlogRef = useRef(null);
-  const [completion, setCompletion] = useState('');
+  const toBottomButtonStyle = css({
+    zIndex: '9999',
+  })
 
   return (
     <div className="App">
-      {sidemenu}
+      <SideMenu setMessages={setMessages}/>
       <section className="chatbox">
-      <div className="chat-log" ref={chatlogRef}>
-        {messages.length > 1 ? (<RenderChat messages={messages} updateMessage={updateMessage}/>) : <></>}
-      <div> {completion} </div>
-      <div className="message-border"> </div>
-      </div>
-        <div className="chat-input-container">
-          <div className="chat-input-box">
-            {AutoSizeTextarea(handleInputKeyDown, handleInputChange)}
-          </div>
-        </div>
+      <ScrollToBottom className={chatLogStyles.toString()} scrollViewClassName={childrenStyle.toString()} followButtonClassName={toBottomButtonStyle.toString()}>
+        {messages.length > 0 ? (<RenderChat messages={messages} updateMessage={updateMessage}/>) : titlePage}
+        <div className="message-border"> </div>
+      </ScrollToBottom>
+      {AutoSizeTextarea(handleInputKeyDown, handleInputChange)}
       </section>
     </div>
   );
 }
-
-function AutoSizeTextarea(onKeyDown, onChange) {
-  // Create a ref that will be used to get a reference to the textarea element
-  const textareaRef = useRef(null);
-  // Initialize the number of rows to 1
-  var rows = 1
-
-  // Use the useEffect hook to calculate the appropriate number of rows for the textarea element based on its content
-  useEffect(() => {
-    if (textareaRef.current) {
-      // Set the textarea element's height to "auto" to measure its actual height
-      textareaRef.current.style.height = "auto";
-      let scrollHeight = textareaRef.current.scrollHeight;
-      // Calculate the number of rows based on the textarea element's scrollHeight 
-      // and the height of a single row (24 pixels in this case)
-      rows = Math.floor(scrollHeight/24) > 5 ? 6 : Math.floor(scrollHeight/24);
-      // Set the textarea element's height to the appropriate height based on the number of rows
-      textareaRef.current.style.height = `${scrollHeight > 48 ? rows * 24 : 24}px`;
-      // Set the textarea element's overflowY property to "auto" if the number of rows is greater than 5, 
-      // which will enable scrolling if the content exceeds the height of the textarea element
-      if (rows > 5) {
-        textareaRef.current.style.overflowY = "auto"
-      } else {
-        textareaRef.current.style.overflowY = "hidden"
-      }
-    }
-  });
-
-  // send a simulated key press event for the Enter key to the textarea element
-  // so it can be used for sending user input to API
-  function handleInputClick() {
-    const textarea = textareaRef.current;
-    const enterKeyEvent = new KeyboardEvent('keydown', {
-      key: 'Enter',
-      code: 'Enter',
-      keyCode: 13,
-      which: 13,
-      bubbles: true,
-      cancelable: true
-    });
-    textarea.dispatchEvent(enterKeyEvent);
-  }
-
-  return (
-    <div className='chat-input-area'>
-    <textarea className="chat-input-textarea"
-      ref={textareaRef}
-      rows={rows}
-      onChange={onChange}
-      onKeyDown = {onKeyDown}
-      style={{
-        overflowY: rows > 5 ? "scroll" : "hidden",
-      }}
-    />
-    <button className="input-button" onClick={handleInputClick}> 
-      <PaperAirplaneIcon className="input-icon" style={{height:'18px', width:'18px',color:'#8e8ea0', transform: 'rotate(-45deg)'}}></PaperAirplaneIcon>
-     </button>
-    </div>
-  );
-}
-
 
 export default App;

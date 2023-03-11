@@ -1,0 +1,100 @@
+
+
+
+.input-button {
+    position: relative;
+    bottom: -4.5px;
+    left: -34px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    padding: 1px;
+    width: 32px;
+    cursor: pointer;
+    z-index: 9999;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.input-button:hover {
+    background-color: #28292c;
+}
+
+
+.chat-input-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: none;
+    display: inline-block;
+}
+
+.chat-input-box {
+    padding: 14px;
+    border: none;
+}
+
+.chat-input-textarea {
+    background-color: #40414f;
+    width: 80%;
+    height: 24px;
+    max-height: 200px;
+    border: none;
+    color: #ececf1;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+    font-size: 1.25em;
+    outline: none;
+    padding: 12px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    resize: none;
+    vertical-align: middle;
+    margin: 0;
+}
+
+.chat-input-textarea-sq {
+    background-color: #40414f;
+    position: relative;
+    bottom: 0;
+    left: 15px;
+    width: 85%;
+    height: 24px;
+    max-height: 200px;
+    border: none;
+    color: #ececf1;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+    font-size: 1.25em;
+    outline: none;
+    padding: 12px;
+
+    resize: none;
+    vertical-align: middle;
+    margin: 0;
+}
+
+.chat-input-textarea::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-input-textarea::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 14px;
+}
+
+.chat-input-textarea::-webkit-scrollbar-track {
+    background-color: #40414f;
+}
+
+.chat-input-textarea::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+.chat-input-textarea::-webkit-scrollbar-button {
+    display: none;
+}
