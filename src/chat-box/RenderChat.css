@@ -1,0 +1,28 @@
+.bot-icon {
+    background-color: rgb(16, 163, 127);
+    border-radius: 0.125rem;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+}
+
+.user-icon {
+    background-color: #6c9f31;
+    border-radius: 0.125rem;
+    font-weight: lighter;
+    font-size: 16px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+}
+
+.bot-icon-svg {
+    width: 1.4rem;
+    height: 1.4rem;
+}

@@ -1,4 +1,5 @@
 import './App.css';
+import './inline.css';
 
 import React, { useState, useRef, useEffect  } from 'react';
 import RenderChat from './chat-box/RenderChat';
@@ -37,6 +38,7 @@ function App() {
     let text = event.target.value;
     if (text !== '') {
       if (event.keyCode === 13) {
+        text = text.replace(/\n/g, '\n\n');
         event.preventDefault();
         event.target.style.height = '24px';
         setMessages([
@@ -86,17 +88,56 @@ function App() {
       event.preventDefault();
     }
   };
+  // this always update the agent message only
+  const regenerateMessage = async (id, text) => {
+    if (text !== '') {
+        try {
+          const sendMessageResponse = await fetch(
+            'http://localhost:8000/api/send-message',
+            {
+              method: 'POST',
+              body: JSON.stringify({ 
+                index: id,
+                message: text }),
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+          console.log(sendMessageResponse);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+        var data = '';
+        var eventSource = new EventSource('http://localhost:8000/api/get-completion-streaming');
+        eventSource.onmessage = (event) => {
+          let newData = event.data;
+          // God knows why I need to parse it specifically
+          if (newData === "/XG4=/") {
+            newData = '';
+            data += '  \n  ';
+          }
+          // 
+          if (newData === '\0')
+            eventSource.close();
+          else
+            data += newData;
+          updateMessage(id, 'agent', data);
+        };
+    }
+  }
 
   //const chatlogRef = useRef(null);
 
   const titlePage = (
     <h1 className='position-center text-4xl font-semibold text-center text-gray-600 ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center flex-grow'>
         ChatGPT
-        <span className='bg-yellow-200 text-yellow-900 py-05 px-15 text-xs md:text-sm rounded-md uppercase'>Context</span>
+        <span className='bg-yellow-200 text-yellow-900 py-05 px-15 text-xs md:text-sm rounded-md uppercase'>Turbo</span>
     </h1>
   )
 
   const chatLogStyles = css({
+    display:'flex',
     position: 'relative',
     top: 0,
     bottom: 0,
@@ -111,6 +152,7 @@ function App() {
   });
 
   const childrenStyle = css({
+    display:'flex-inline',
     border: 'none',
     overflowX: 'hidden',
     overflowY: 'auto',
@@ -124,8 +166,9 @@ function App() {
     <div className="App">
       <SideMenu setMessages={setMessages}/>
       <section className="chatbox">
-      <ScrollToBottom className={chatLogStyles.toString()} scrollViewClassName={childrenStyle.toString()} followButtonClassName={toBottomButtonStyle.toString()}>
-        {messages.length > 0 ? (<RenderChat messages={messages} updateMessage={updateMessage}/>) : titlePage}
+      <ScrollToBottom className={chatLogStyles.toString()} scrollViewClassName={childrenStyle.toString()} 
+      followButtonClassName={toBottomButtonStyle.toString()}>
+        {messages.length > 0 ? (<RenderChat messages={messages} updateMessage={updateMessage} regenerateMessage={regenerateMessage}/>) : titlePage}
         <div className="message-border"> </div>
       </ScrollToBottom>
       {AutoSizeTextarea(handleInputKeyDown, handleInputChange)}

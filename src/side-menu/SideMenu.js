@@ -37,10 +37,10 @@ const {setMessages} = props
     setMessages(
       [
         //{ id: Number, from: String, text: String },
-        { id: 1, from: 'user', text: 'Hi there!' },
-          { id: 2, from: 'agent', text: 'Hello, how can I help you?' },
-          { id: 3, from: 'user', text: 'I need help with my account' },
-          { id: 4, from: 'agent', text: '### This is a heading\n\nThis is a paragraph with **bold** and *italic* text.' },
+        //{ id: 1, from: 'user', text: 'Hi there!' },
+        //  { id: 2, from: 'agent', text: 'Hello, how can I help you?' },
+        //  { id: 3, from: 'user', text: 'I need help with my account' },
+        //  { id: 4, from: 'agent', text: '### This is a heading\n\nThis is a paragraph with **bold** and *italic* text.' },
       ]
     )
     //#TODO Communicate with backend so that It may begin a new session

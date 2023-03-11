@@ -43,6 +43,7 @@
     width: 80%;
     height: 24px;
     max-height: 200px;
+    max-width: 768px;
     border: none;
     color: #ececf1;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);

@@ -91,7 +91,7 @@ function AutoSizeTextarea(onKeyDown, onChange) {
             <div className="chat-input-box">
                 <div className='chat-input-area'>
                     {showFloatBar ? floatInputArea : squareInputArea}
-                    <button className="input-button" onClick={handleInputClick}>
+                    <button className="input-button" onClick={handleInputClick} >
                         <PaperAirplaneIcon className="input-icon" style={{ height: '18px', width: '18px', color: '#8e8ea0', transform: 'rotate(-45deg)' }}></PaperAirplaneIcon>
                     </button>
                 </div>
