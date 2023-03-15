@@ -8,14 +8,18 @@ import SideMenu from './side-menu/SideMenu';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { css } from 'glamor';
 
-
-
-//    { id: 4, from: 'agent', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.?' },
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState([
   ]);
+
+  // set up the session id
+  const [sessionId, setSessionId] = useState(uuidv4());
+  const [sessionList, setSessionList] = useState([]);
+
+  const init_id = sessionId;
 
   function updateMessage(id, from, text) {
     setMessages(prevMessages =>
@@ -28,6 +32,16 @@ function App() {
       })
     );
   }
+
+  const fetchSessionList = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/get-session-list");
+      const sessionListData = await response.json();
+      setSessionList(sessionListData);
+    } catch (error) {
+      console.error("Error fetching session list:", error);
+    }
+  };
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -46,13 +60,19 @@ function App() {
           { id: messages.length + 1, from: 'user', text: text },
         ]);
         event.target.value = '';
+
+        let newSession = false;
+        if (sessionId === init_id) {
+          newSession = true;
+          console.log(sessionId);
+        }
   
         try {
           const sendMessageResponse = await fetch(
             'http://localhost:8000/api/send-message',
             {
               method: 'POST',
-              body: JSON.stringify({ message: text }),
+              body: JSON.stringify({ message: text , sessionId: sessionId}),
               headers: {
                 'Content-Type': 'application/json',
               },
@@ -62,8 +82,9 @@ function App() {
         } catch (error) {
           console.error('Error:', error);
         }
+        //
         var data = '';
-        var eventSource = new EventSource('http://localhost:8000/api/get-completion-streaming');
+        var eventSource = new EventSource(`http://localhost:8000/api/get-completion-streaming/${sessionId}`);
         eventSource.onmessage = (event) => {
           let newData = event.data;
           // God knows why I need to parse it specifically
@@ -82,6 +103,10 @@ function App() {
             { id: messages.length + 2, from: 'agent', text: data },
           ]);
         }; 
+        if (newSession) {
+          console.log("fetching session list");
+          fetchSessionList();
+        }
       }
     }
     if (event.keyCode === 13) {
@@ -98,7 +123,8 @@ function App() {
               method: 'POST',
               body: JSON.stringify({ 
                 index: id,
-                message: text }),
+                message: text,
+                sessionId: sessionId }),
               headers: {
                 'Content-Type': 'application/json',
               },
@@ -109,7 +135,7 @@ function App() {
           console.error('Error:', error);
         }
         var data = '';
-        var eventSource = new EventSource('http://localhost:8000/api/get-completion-streaming');
+        var eventSource = new EventSource(`http://localhost:8000/api/get-completion-streaming/${sessionId}`);
         eventSource.onmessage = (event) => {
           let newData = event.data;
           // God knows why I need to parse it specifically
@@ -164,7 +190,7 @@ function App() {
 
   return (
     <div className="App">
-      <SideMenu setMessages={setMessages}/>
+      <SideMenu setMessages={setMessages} setSessionId={setSessionId} sessionId={sessionId} sessionList={sessionList} fetchSessionList={fetchSessionList}/>
       <section className="chatbox">
       <ScrollToBottom className={chatLogStyles.toString()} scrollViewClassName={childrenStyle.toString()} 
       followButtonClassName={toBottomButtonStyle.toString()}>

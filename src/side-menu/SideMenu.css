@@ -69,3 +69,24 @@
     margin-right: 10px;
   }
   
+  /* Add this to your CSS file */
+.session-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  word-break: break-all;
+  overflow-wrap: break-word;
+
+  border-radius: 6px;
+  font-size: 14px;
+  padding: 8px;
+}
+
+.session-list-item:hover {
+  background-color: #343642;
+}
+
+.session-list-item.selected {
+  background-color: #343642;
+  font-weight: bold;
+}
