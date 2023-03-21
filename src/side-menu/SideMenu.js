@@ -6,6 +6,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ChatBubbleLeftIcon } from '@heroicons/react/24/solid'
 
+import deleteBtn from './deleteBtn';
+
 function SideMenu(props) {
   const {setMessages, setSessionId, sessionId, sessionList, fetchSessionList} = props
 
@@ -93,8 +95,9 @@ function SideMenu(props) {
         className={`session-list-item${sessionId === id ? " selected" : ""}`}
         onClick={() => onClick(id)}
       >
-        <ChatBubbleLeftIcon className="input-icon" style={{ height: '18px', width: '18px', color: '#8e8ea0', padding: '4px' }}></ChatBubbleLeftIcon>
+        <ChatBubbleLeftIcon className="input-icon" style={{ height: '24px', width: '24px', color: '#8e8ea0', padding: '4px' }}></ChatBubbleLeftIcon>
         <div className={'session-list-item-text'} children={id}></div>
+        {deleteBtn({fetchSessionList, session_id: id})}
       </div>
     );
   }
