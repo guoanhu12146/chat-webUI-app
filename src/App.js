@@ -26,10 +26,14 @@ function App() {
       prevMessages.map(message => {
         if (message.id === id) {
           return { ...message, from, text };
-        } else {
+        } 
+        else if (message.id > id+1) {
+          return null
+        }
+        else {
           return message;
         }
-      })
+      }).filter(message => message !== null) // filter out null messages
     );
   }
 
@@ -83,26 +87,7 @@ function App() {
           console.error('Error:', error);
         }
         //
-        var data = '';
-        var eventSource = new EventSource(`http://localhost:8000/api/get-completion-streaming/${sessionId}`);
-        eventSource.onmessage = (event) => {
-          let newData = event.data;
-          // God knows why I need to parse it specifically
-          if (newData === "/XG4=/") {
-            newData = '';
-            data += '  \n  ';
-          }
-          // 
-          if (newData === '\0')
-            eventSource.close();
-          else
-            data += newData;
-          setMessages([
-            ...messages,
-            { id: messages.length + 1, from: 'user', text: text },
-            { id: messages.length + 2, from: 'agent', text: data },
-          ]);
-        }; 
+        await fetchCompletionData(messages.length + 1, false, text);
         if (newSession) {
           console.log("fetching session list");
           fetchSessionList();
@@ -118,7 +103,7 @@ function App() {
     if (text !== '') {
         try {
           const sendMessageResponse = await fetch(
-            'http://localhost:8000/api/send-message',
+            'http://localhost:8000/api/branch-chat',
             {
               method: 'POST',
               body: JSON.stringify({ 
@@ -134,24 +119,35 @@ function App() {
         } catch (error) {
           console.error('Error:', error);
         }
-        var data = '';
-        var eventSource = new EventSource(`http://localhost:8000/api/get-completion-streaming/${sessionId}`);
-        eventSource.onmessage = (event) => {
-          let newData = event.data;
-          // God knows why I need to parse it specifically
-          if (newData === "/XG4=/") {
-            newData = '';
-            data += '  \n  ';
-          }
-          // 
-          if (newData === '\0')
-            eventSource.close();
-          else
-            data += newData;
-          updateMessage(id, 'agent', data);
-        };
+        await fetchCompletionData(id, true, '');
     }
   }
+
+  async function fetchCompletionData(id, update, text) {
+      var data = '';
+      var eventSource = new EventSource(`http://localhost:8000/api/get-completion-streaming/${sessionId}`);
+      eventSource.onmessage = (event) => {
+        let newData = event.data;
+        // God knows why I need to parse it specifically
+        if (newData === "/XG4=/") {
+          newData = '';
+          data += '  \n  ';
+        }
+        // 
+        if (newData === '\0')
+          eventSource.close();
+        else
+          data += newData;
+        if (update)
+          updateMessage(id, 'agent', data);
+        else
+          setMessages([
+            ...messages,
+            {id: id, from: 'user', text: text},
+            { id: id+1, from: 'agent', text: data },
+          ]);
+      };
+    }
 
   //const chatlogRef = useRef(null);
 

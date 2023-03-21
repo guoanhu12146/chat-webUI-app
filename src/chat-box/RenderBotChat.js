@@ -6,13 +6,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism'
 
 import CodeCopyBtn from './codeCopyBtn';
 
-    
-
-export default function RenderBotMessageText(props) {
-
-    const {message, updateMessage} = props
-
-    let text = message.text
+export default function RenderBotMessageText({text}) {
 
     const Pre = ({ children }) => <div className="code-pre">
         <CodeCopyBtn>{children}</CodeCopyBtn>

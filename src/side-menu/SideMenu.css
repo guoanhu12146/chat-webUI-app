@@ -72,21 +72,32 @@
   /* Add this to your CSS file */
 .session-list-item {
   display: flex;
+
   align-items: center;
   justify-content: flex-start;
-  word-break: break-all;
-  overflow-wrap: break-word;
+  word-break: keep-all;
 
   border-radius: 6px;
   font-size: 14px;
-  padding: 8px;
+  padding: 6px;
+  font-weight: 200;
 }
 
 .session-list-item:hover {
   background-color: #343642;
+  cursor: pointer;
 }
 
 .session-list-item.selected {
   background-color: #343642;
-  font-weight: bold;
+  font-weight: 400;
+}
+
+.session-list-item-text {
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

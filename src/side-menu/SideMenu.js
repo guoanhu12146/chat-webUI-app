@@ -4,6 +4,8 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import "./SideMenu.css"
 import { v4 as uuidv4 } from 'uuid';
 
+import { ChatBubbleLeftIcon } from '@heroicons/react/24/solid'
+
 function SideMenu(props) {
   const {setMessages, setSessionId, sessionId, sessionList, fetchSessionList} = props
 
@@ -35,7 +37,7 @@ function SideMenu(props) {
     setFloatmenu(false);
   };
 
-  const handleNewchatClick = () => {
+  const handleNewchatClick = async () => {
     setMessages(
       [
         //{ id: Number, from: String, text: String },
@@ -77,6 +79,7 @@ function SideMenu(props) {
     try {
       const response = await fetch(`http://localhost:8000/api/get-chat-history/${selectedSessionId}`);
       const chatHistory = await response.json();
+      setMessages([]);
       setMessages(chatHistory);
       setSessionId(selectedSessionId);
     } catch (error) {
@@ -90,7 +93,8 @@ function SideMenu(props) {
         className={`session-list-item${sessionId === id ? " selected" : ""}`}
         onClick={() => onClick(id)}
       >
-        {id}
+        <ChatBubbleLeftIcon className="input-icon" style={{ height: '18px', width: '18px', color: '#8e8ea0', padding: '4px' }}></ChatBubbleLeftIcon>
+        <div className={'session-list-item-text'} children={id}></div>
       </div>
     );
   }

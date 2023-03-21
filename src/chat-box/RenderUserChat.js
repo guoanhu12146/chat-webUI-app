@@ -12,14 +12,14 @@ export default function RenderUserMessageText(props) {
     let from = message.from;
     let value = message.text;
     const [editing, setEditing] = useState(false);
-    const [text, setText] = useState(value);
+    const [inputText, setInputText] = useState(value);
 
     const handleInputChange = (event) => {
-      setText(event.target.value);
+      setInputText(event.target.value);
     };
   
     const handleSaveClick = () => {
-        value = text;
+        value = inputText;
         console.log(value);
         updateMessage(id, from, value);
         regenerateMessage(id+1, value);
@@ -27,7 +27,7 @@ export default function RenderUserMessageText(props) {
     };
 
     const handleCancel = () => {
-      setText(value);
+      setInputText(value);
       setEditing(false);
     }
 
@@ -39,19 +39,21 @@ export default function RenderUserMessageText(props) {
         textareaRef.current.style.height = 'auto'; // Reset the height to auto to recalculate the height
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Set the height based on the content
       }
-    }, [text]);
+    }, [inputText]);
 
     const handleEdit = () => {
       setEditing(true);
       // sanitize text also update textarea viewport, how awesome
+      console.log(value);
       value = value.replace(/\n\n/g, '\n');
-      setText(value);
+      value = value.append('a');
+      setInputText(value);
     }
   
     if (editing) {
       return (
         <div className="user-message-text">
-          <textarea className="edit-area" value={text} onChange={handleInputChange}  ref={textareaRef} rows={1}/>
+          <textarea className="edit-area" value={inputText} onChange={handleInputChange}  ref={textareaRef} rows={1}/>
           <div className='button-container'> 
               <button className="btn save-button" onClick={handleSaveClick}> Save&Submit </button> 
               <button className="btn cancel-button" onClick={handleCancel}> Cancel </button>

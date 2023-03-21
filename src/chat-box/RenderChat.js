@@ -11,6 +11,9 @@ import aiLogo from '../chatgpt-icon.svg'
 import RenderBotMessageText from './RenderBotChat'
 import RenderUserMessageText from './RenderUserChat';
 
+import RenderBotMessageTextLW from './RenderBotChatLW';
+import MemoRenderBotMessageText from './MemoBotChat';
+
 function RenderChat(props) {
   
   //flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans
@@ -53,7 +56,7 @@ function RenderChat(props) {
               <div className="message-text">
               {message.from === 'user'
                 ? <RenderUserMessageText message={message} updateMessage={updateMessage}  regenerateMessage={regenerateMessage}/>
-                : <RenderBotMessageText message={message}  updateMessage={updateMessage} />}
+                : <MemoRenderBotMessageText text={message.text} /> }
             </div>
             </div>
           </div>
