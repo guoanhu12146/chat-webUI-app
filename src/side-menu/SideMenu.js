@@ -113,18 +113,18 @@ function SideMenu(props) {
       {showSidemenu && (
         <aside className="sidemenu">
           {newchatButton}
-          <div className="session-list mt-4">
+          <div className="session-list">
           {renderSessionList()}
         </div>
         </aside>
       )}
-      {showFloatmenu && (
-        <aside className="float-sidemenu">
+      {!showSidemenu && (
+        <div className={`float-sidemenu ${showFloatmenu ? 'show' : ''}`}>
           {newchatButton}
-          <div className="session-list mt-4">
-          {renderSessionList()}
+          <div className="session-list">
+            {renderSessionList()}
+          </div>
         </div>
-        </aside>
       )}
       {!showSidemenu && !showFloatmenu && (
         <button className="button" onClick={handleButtonClick}> = </button>

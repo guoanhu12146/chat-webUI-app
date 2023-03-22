@@ -4,7 +4,7 @@ import gfm from "remark-gfm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
-import './userchat.css'
+import './RenderUserChat.css'
 
 export default function RenderUserMessageText(props) {
     const {message, updateMessage, regenerateMessage} = props;

@@ -8,15 +8,20 @@
   
   .float-sidemenu {
     height: 100%;
-    width:240px;
+    width:300px;
     min-width: 240px;
     padding:10px;
    /* border:1px solid #6e6e80;*/
     position: fixed;
     top: 0px;
-    left: 0px;
+    left: -360px;
     background-color: #202123f3;
-    z-index: 9999;
+    z-index: 20;
+    transition: all 0.7s ease-in-out;
+  }
+  
+  .float-sidemenu.show {
+    left: 0px; /* move the menu into view */
   }
   
   .button {
@@ -68,18 +73,39 @@
     font-size: 12px;
     margin-right: 10px;
   }
+
+.session-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 6px;
+  overflow-y: scroll;
+  max-height: 60%;
+}
+
+.session-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.session-list::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 14px;
+}
+
+.session-list::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
   
   /* Add this to your CSS file */
 .session-list-item {
   display: flex;
-
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   word-break: keep-all;
 
   border-radius: 6px;
   font-size: 14px;
-  padding: 6px;
+  margin-bottom: 3px;
+  padding: 3px;
   font-weight: 200;
 }
 
