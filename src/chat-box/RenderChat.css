@@ -27,14 +27,27 @@
     height: 1.4rem;
 }
 
-code {
-    background-color: #201d1d;
-    display: block;
-    width: 100%;
-    border-radius: 6px;
-    padding: 6px;
+.chat-header {
+    font-size: 0.9em;
+    font-weight: 375;
+    --tw-text-opacity: 1;
+    color: rgba(197,197,210,var(--tw-text-opacity));
+    background-color: #40414f;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
 
-    font-size: 13px;
+code {
+    display: inline-block;
+    width: auto;
+    border-radius: 6px;
+    padding-top: 0%;
+    padding-bottom: 0%;
+    padding-left: 6px;
+    padding-right: 6px;
+
+    font-size: 13.5px;
+
     text-shadow: none;
     font-family: Menlo, Monaco, Consolas, "Andale Mono", "Ubuntu Mono", "Courier New", monospace;
     direction: ltr;
@@ -42,7 +55,7 @@ code {
     white-space: pre;
     word-spacing: normal;
     word-break: normal;
-    line-height: 1.5;
+    line-height: 1;
     tab-size: 4;
     hyphens: none;
 }

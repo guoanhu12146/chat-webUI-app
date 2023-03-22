@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect  } from 'react';
 import {PaperAirplaneIcon} from '@heroicons/react/24/solid'
 
+
 import "./InputArea.css"
 
 function AutoSizeTextarea(onKeyDown, onChange) {
@@ -12,16 +13,15 @@ function AutoSizeTextarea(onKeyDown, onChange) {
   
     // Use the useEffect hook to calculate the appropriate number of rows for the textarea element based on its content
     useEffect(() => {
-      
       if (textareaRef.current) {
         // Set the textarea element's height to "auto" to measure its actual height
         textareaRef.current.style.height = "auto";
         let scrollHeight = textareaRef.current.scrollHeight;
         // Calculate the number of rows based on the textarea element's scrollHeight 
         // and the height of a single row (24 pixels in this case)
-        rows = Math.floor(scrollHeight/24) > 5 ? 6 : Math.floor(scrollHeight/24);
+        rows = Math.floor(scrollHeight/24) > 6 ? 7 : Math.floor(scrollHeight/24);
         // Set the textarea element's height to the appropriate height based on the number of rows
-        textareaRef.current.style.height = `${scrollHeight > 48 ? rows * 24 : 24}px`;
+        textareaRef.current.style.height = `${rows * 24 }px`;
         // Set the textarea element's overflowY property to "auto" if the number of rows is greater than 5, 
         // which will enable scrolling if the content exceeds the height of the textarea element
         if (rows > 5) {
@@ -62,39 +62,55 @@ function AutoSizeTextarea(onKeyDown, onChange) {
       textarea.dispatchEvent(enterKeyEvent);
     }
 
+    const btnIcon = (
+      <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" 
+      stroke-linecap="round" stroke-linejoin="round" className="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+    )
+
+    const inputbtn = (
+      <div className='inputbtn-container'>
+        <button className="input-button" onClick={handleInputClick} >
+          {btnIcon}
+        </button>
+      </div>
+    )
+
     const floatInputArea = (
+      <div className='chat-input-area'>
         <textarea className="chat-input-textarea"
         ref={textareaRef}
-        rows={rows}
+        rows={1}
         onChange={onChange}
         onKeyDown = {onKeyDown}
         style={{
           overflowY: rows > 5 ? "scroll" : "hidden",
         }}
       />
+      {inputbtn}
+      </div>
     )
 
     const squareInputArea = (
-        <textarea className="chat-input-textarea-sq"
+      <div className='chat-input-area box'>
+      <textarea className="chat-input-textarea"
         ref={textareaRef}
-        rows={rows}
+        rows={1}
         onChange={onChange}
         onKeyDown = {onKeyDown}
         style={{
           overflowY: rows > 5 ? "scroll" : "hidden",
         }}
       />
+      {inputbtn}
+      </div>
     )
   
     return (
         <div className="chat-input-container">
-            <div className="chat-input-box">
-                <div className='chat-input-area'>
-                    {showFloatBar ? floatInputArea : squareInputArea}
-                    <button className="input-button" onClick={handleInputClick} >
-                        <PaperAirplaneIcon className="input-icon" style={{ height: '18px', width: '18px', color: '#8e8ea0', transform: 'rotate(-45deg)' }}></PaperAirplaneIcon>
-                    </button>
-                </div>
+            <div className="chat-input-box"> 
+              {showFloatBar ? floatInputArea : squareInputArea}
             </div>
         </div>
     );

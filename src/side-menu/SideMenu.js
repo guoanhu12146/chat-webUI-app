@@ -52,8 +52,8 @@ function SideMenu(props) {
     // set new session id
     const newSessionId = uuidv4();
     setSessionId(newSessionId);
-    //#TODO Communicate with backend so that It may begin a new session
-    const sendMessageResponse = fetch(
+    // Communicate with backend so that It may begin a new session
+    const sendMessageResponse = await fetch(
       'http://localhost:8000/api/new-chat',
       {
         method: 'POST',
@@ -63,10 +63,10 @@ function SideMenu(props) {
           'Content-Type': 'application/json',
         },
       }
-    );
-    console.log(sendMessageResponse);
-    console.log("New session id: ", newSessionId);
-    fetchSessionList();
+    ).then( async () => {
+      console.log("New session id: ", newSessionId);
+      await fetchSessionList();
+    });
   };
   /**         */
   const newchatButton = (
@@ -108,6 +108,25 @@ function SideMenu(props) {
     ));
   };
 
+  async function handleDeleteAllChat() {
+    console.log("Delete all chat");
+    const response = await fetch(`http://localhost:8000/api/delete-all-chat`);
+    const clear = await fetchSessionList().then ( () => {
+      setMessages([]);
+    });
+  }
+
+  const setting = (
+    <>
+    <hr></hr>
+    <div className="session-list-item" onClick={handleDeleteAllChat} > Delete all chat </div>
+    <a className="session-list-item" > setting </a>
+    <a className="session-list-item" > setting </a>
+    <a className="session-list-item" > setting </a>
+    <a className="session-list-item" > setting </a>
+    </>
+  )
+
   const sidemenu = (
     <>
       {showSidemenu && (
@@ -116,6 +135,7 @@ function SideMenu(props) {
           <div className="session-list">
           {renderSessionList()}
         </div>
+        {setting}
         </aside>
       )}
       {!showSidemenu && (
@@ -124,6 +144,7 @@ function SideMenu(props) {
           <div className="session-list">
             {renderSessionList()}
           </div>
+          {setting}
         </div>
       )}
       {!showSidemenu && !showFloatmenu && (
@@ -134,7 +155,7 @@ function SideMenu(props) {
       )}
     </>
   );
-
+  
   return (
     sidemenu
   )

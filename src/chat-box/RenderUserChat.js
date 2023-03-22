@@ -20,7 +20,8 @@ export default function RenderUserMessageText(props) {
   
     const handleSaveClick = () => {
         value = inputText;
-        console.log(value);
+        value = value.replace(/\n/g, '\n\n');
+        setInputText(value);
         updateMessage(id, from, value);
         regenerateMessage(id+1, value);
         setEditing(false);
@@ -46,7 +47,6 @@ export default function RenderUserMessageText(props) {
       // sanitize text also update textarea viewport, how awesome
       console.log(value);
       value = value.replace(/\n\n/g, '\n');
-      value = value.append('a');
       setInputText(value);
     }
   

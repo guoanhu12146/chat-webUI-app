@@ -41,28 +41,31 @@ function RenderChat(props) {
   )
 
   return (
-    <div>
-      {messages.map((message) => (
-        <div
-          key={message.id}
-          className={`chat-message ${
-            message.from === 'user' ? 'from-user' : 'from-agent'
-          }`}
-        >
-          <div className="message-border">
-            <div className="message-container">
-              <div className="message-avatar"> {
-              message.from === 'user' ? userIcon : chatgptIcon } </div>
-              <div className="message-text">
-              {message.from === 'user'
-                ? <RenderUserMessageText message={message} updateMessage={updateMessage}  regenerateMessage={regenerateMessage}/>
-                : <MemoRenderBotMessageText text={message.text} /> }
-            </div>
+    <>
+      <div className="chat-header"> Model: Default (GPT-3.5) </div>
+      <div>
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`chat-message ${
+              message.from === 'user' ? 'from-user' : 'from-agent'
+            }`}
+          >
+            <div className="message-border">
+              <div className="message-container">
+                <div className="message-avatar"> {
+                message.from === 'user' ? userIcon : chatgptIcon } </div>
+                <div className="message-text">
+                {message.from === 'user'
+                  ? <RenderUserMessageText message={message} updateMessage={updateMessage}  regenerateMessage={regenerateMessage}/>
+                  : <MemoRenderBotMessageText text={message.text} /> }
+              </div>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   );
 }
 

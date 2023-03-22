@@ -3,6 +3,10 @@ body {
   overflow: clip;
 }
 
+svg {
+  stroke: currentColor;
+}
+
 .App {
   text-align: center;
   display: flex;
@@ -55,6 +59,7 @@ body {
 
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-thumb {

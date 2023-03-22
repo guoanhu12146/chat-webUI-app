@@ -1,6 +1,6 @@
 .code-pre {
     padding: 1px;
-    padding-top: 10px;
+    padding-top: 4px;
     padding-bottom: 0px;
     background-color: #343541;
     margin-bottom: 1.5em !important;
@@ -10,7 +10,7 @@
 
 .code-name {
     padding-left: 0.5rem;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.0rem;
     font-size: small;
     background-color: #343541;
 }
