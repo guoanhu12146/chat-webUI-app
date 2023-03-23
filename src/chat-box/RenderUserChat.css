@@ -48,11 +48,15 @@
   }
 
 .edit-button {
-  margin-top: -12px;
+  position: relative;
+  left: 50%;
+  bottom: 20px;
+  margin-top: -47.6px;
   background: #343541;
   box-shadow: none;
   border: none;
-  color: white;
+  --tw-text-opacity: 1;
+    color: rgba(142,142,160,var(--tw-text-opacity));
   height: 37.6px;
   width: 40px;
 }

@@ -1,7 +1,7 @@
 .sidemenu {
-    width:240px;
-    min-width: 240px;
-    padding:10px;
+    width:244px;
+    min-width: 244px;
+    padding:8px;
    /* border:1px solid #6e6e80;*/
     background-color: #202123;
   }
@@ -34,6 +34,8 @@
     font-size: 20px;
     cursor: pointer;
     z-index: 9999;
+    height: 24px;
+    width: 24px;
   }
 
 
@@ -76,17 +78,34 @@
 .session-list {
   display: flex;
   flex-direction: column;
-  margin-top: 6px;
-  overflow-y: auto;
+  margin-top: 12px;
+  overflow-y: scroll;
   height: 70%;
   max-height: 70%;
+
+  margin-right: -0.5rem;
 }
 
 .session-list::-webkit-scrollbar {
-  width: 4px;
+  width: 8px;
+}
+
+.session-list:hover::-webkit-scrollbar {
+  width: 8px;
 }
 
 .session-list::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 14px;
+}
+
+
+.session-list::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 14px;
+}
+
+.session-list:hover::-webkit-scrollbar-thumb {
   background-color: #888;
   border-radius: 14px;
 }
@@ -104,9 +123,11 @@
 
   border-radius: 6px;
   font-size: 14px;
-  margin-bottom: 3px;
+  margin-bottom: 6px;
   padding: 3px;
   font-weight: 200;
+
+  min-height: 38px;
 }
 
 .session-list-item:hover {

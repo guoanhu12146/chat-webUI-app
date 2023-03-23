@@ -8,6 +8,24 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  display: inline-block;
+  width: auto;
+  border-radius: 6px;
+  padding-top: 0%;
+  padding-bottom: 0%;
+  padding-left: 6px;
+  padding-right: 6px;
+
+  font-size: 13.5px;
+
+  text-shadow: none;
+  font-family: Menlo, Monaco, Consolas, "Andale Mono", "Ubuntu Mono", "Courier New", monospace;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  line-height: 1;
+  tab-size: 4;
+  hyphens: none;
 }

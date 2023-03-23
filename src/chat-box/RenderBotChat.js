@@ -36,8 +36,7 @@ export default function RenderBotMessageText({text}) {
                   <Highlighter
                       className="code-content-inline"
                       style={vscDarkPlus}
-                      customStyle={{background: 'transparent', fontsize:"15px"}}
-                      useInlineStyles={true}
+                      useInlineStyles={false}
                       PreTag="code"
                       {...props}
                   >

@@ -102,3 +102,19 @@
   .w-30 {
     width: 30px;
   }
+
+  .h-4 {
+    height: 1rem;
+  }
+
+  .w-4 {
+    width: 1rem;
+  }
+
+  .ml-2 {
+    margin-left: 0.5rem;
+  }
+
+  .mr-2 {
+    margin-right: 0.5rem;
+  }

@@ -62,12 +62,21 @@ svg {
   height: 8px;
 }
 
+:hover::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
 ::-webkit-scrollbar-thumb {
   background-color: #888;
   border-radius: 14px;
 }
 
 ::-webkit-scrollbar-track {
+  background-color: #343541;
+}
+
+:hover::-webkit-scrollbar-track {
   background-color: #343541;
 }
 
